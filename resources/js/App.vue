@@ -8,6 +8,7 @@
         <Footer />
       </div>
     </div>
+    <FlashMessage :position="'right bottom'"></FlashMessage>
   </main>
 </template>
 
