@@ -20,8 +20,8 @@
         </div>
         <div v-if="!tbloader" class="card-body">
             <div class="table-responsive">
-                <table class="table text-center">
-                    <thead>
+                <table class="table table-bordered text-center">
+                    <thead class="bg-primary text-white">
                         <tr>
                           <th>Sl</th>
                           <th>Name</th>
@@ -43,8 +43,11 @@
                 </table>
             </div>
         </div>
-        <div v-if="tbloader" class="d-flex justify-content-center align-content-center mt-5">
-            <span>loading..</span>
+        <div v-if="tbloader" class="d-flex justify-content-center align-content-center mt-5 mb-5">
+            <button class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
         </div>
       </div>
 

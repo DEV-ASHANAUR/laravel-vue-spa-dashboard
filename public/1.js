@@ -101,6 +101,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'category',
@@ -292,36 +295,40 @@ var render = function() {
           !_vm.tbloader
             ? _c("div", { staticClass: "card-body" }, [
                 _c("div", { staticClass: "table-responsive" }, [
-                  _c("table", { staticClass: "table text-center" }, [
-                    _vm._m(2),
-                    _vm._v(" "),
-                    _c(
-                      "tbody",
-                      _vm._l(_vm.categories, function(category, index) {
-                        return _c("tr", { key: index }, [
-                          _c("td", [_vm._v(_vm._s(index + 1))]),
-                          _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(category.name))]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c("img", {
-                              staticClass: "img-fluid img-thumbnail",
-                              attrs: {
-                                src:
-                                  _vm.$store.state.serverPath +
-                                  "storage/" +
-                                  category.image,
-                                width: "100px"
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _vm._m(3, true)
-                        ])
-                      }),
-                      0
-                    )
-                  ])
+                  _c(
+                    "table",
+                    { staticClass: "table table-bordered text-center" },
+                    [
+                      _vm._m(2),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.categories, function(category, index) {
+                          return _c("tr", { key: index }, [
+                            _c("td", [_vm._v(_vm._s(index + 1))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(category.name))]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("img", {
+                                staticClass: "img-fluid img-thumbnail",
+                                attrs: {
+                                  src:
+                                    _vm.$store.state.serverPath +
+                                    "storage/" +
+                                    category.image,
+                                  width: "100px"
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _vm._m(3, true)
+                          ])
+                        }),
+                        0
+                      )
+                    ]
+                  )
                 ])
               ])
             : _vm._e(),
@@ -331,9 +338,9 @@ var render = function() {
                 "div",
                 {
                   staticClass:
-                    "d-flex justify-content-center align-content-center mt-5"
+                    "d-flex justify-content-center align-content-center mt-5 mb-5"
                 },
-                [_c("span", [_vm._v("loading..")])]
+                [_vm._m(4)]
               )
             : _vm._e()
         ]),
@@ -501,7 +508,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
+    return _c("thead", { staticClass: "bg-primary text-white" }, [
       _c("tr", [
         _c("th", [_vm._v("Sl")]),
         _vm._v(" "),
@@ -526,6 +533,25 @@ var staticRenderFns = [
         _c("i", { staticClass: "fas fa-trash" })
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-primary",
+        attrs: { type: "button", disabled: "" }
+      },
+      [
+        _c("span", {
+          staticClass: "spinner-border spinner-border-sm",
+          attrs: { role: "status", "aria-hidden": "true" }
+        }),
+        _vm._v("\n            Loading...\n          ")
+      ]
+    )
   }
 ]
 render._withStripped = true
