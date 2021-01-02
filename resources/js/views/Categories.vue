@@ -36,7 +36,7 @@
                           <td><img :src="`${$store.state.serverPath}storage/${category.image}`" width="100px" class="img-fluid img-thumbnail" /></td>
                           <td>
                               <button class="btn btn-primary"><i class="fas fa-edit"></i></button>
-                              <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                              <button class="btn btn-danger" @click="deleteCategory(category)"><i class="fas fa-trash"></i></button>
                           </td>
                         </tr>
                     </tbody>
@@ -73,7 +73,6 @@
             <div class="text-right">
               <button type="button" class="btn btn-default" @click="hideNewCategoryModal">Cancle</button>
               <button v-if="!loader" type="submit" class="btn btn-primary"><i class="fas fa-check mr-1"></i>Save</button>
-
               <button v-if="loader" type="submit" class="btn btn-primary" disabled><i class="fas fa-check mr-1"></i>Saving</button>
             </div>
           </form>
@@ -167,6 +166,24 @@ export default {
         }
       }
 
+    },
+    deleteCategory: async function(category){
+        if(!window.confirm(`Are you sure you want to delete ${category.name}`)){
+          return;
+        }
+        try {
+          const response = await categoryService.deleteCategory(category.id); 
+          this.categories = this.categories.filter(obj => {
+            return obj.id != category.id;
+          });
+          this.flashMessage.success({
+            message: 'Category deleted successfully!'
+          });
+        } catch (error) {
+          this.flashMessage.error({
+              message: error.response.data.message,
+          });
+        }
     },
   }
 };

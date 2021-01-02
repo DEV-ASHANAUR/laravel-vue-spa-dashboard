@@ -103,7 +103,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'category',
@@ -239,6 +238,57 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return createCategory;
+    }(),
+    deleteCategory: function () {
+      var _deleteCategory = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(category) {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (window.confirm("Are you sure you want to delete ".concat(category.name))) {
+                  _context3.next = 2;
+                  break;
+                }
+
+                return _context3.abrupt("return");
+
+              case 2:
+                _context3.prev = 2;
+                _context3.next = 5;
+                return _services_category_service__WEBPACK_IMPORTED_MODULE_1__["deleteCategory"](category.id);
+
+              case 5:
+                response = _context3.sent;
+                this.categories = this.categories.filter(function (obj) {
+                  return obj.id != category.id;
+                });
+                this.flashMessage.success({
+                  message: 'Category deleted successfully!'
+                });
+                _context3.next = 13;
+                break;
+
+              case 10:
+                _context3.prev = 10;
+                _context3.t0 = _context3["catch"](2);
+                this.flashMessage.error({
+                  message: _context3.t0.response.data.message
+                });
+
+              case 13:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this, [[2, 10]]);
+      }));
+
+      function deleteCategory(_x) {
+        return _deleteCategory.apply(this, arguments);
+      }
+
+      return deleteCategory;
     }()
   }
 });
@@ -322,7 +372,22 @@ var render = function() {
                               })
                             ]),
                             _vm._v(" "),
-                            _vm._m(3, true)
+                            _c("td", [
+                              _vm._m(3, true),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-danger",
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.deleteCategory(category)
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "fas fa-trash" })]
+                              )
+                            ])
                           ])
                         }),
                         0
@@ -524,14 +589,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("button", { staticClass: "btn btn-primary" }, [
-        _c("i", { staticClass: "fas fa-edit" })
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-danger" }, [
-        _c("i", { staticClass: "fas fa-trash" })
-      ])
+    return _c("button", { staticClass: "btn btn-primary" }, [
+      _c("i", { staticClass: "fas fa-edit" })
     ])
   },
   function() {
@@ -564,13 +623,14 @@ render._withStripped = true
 /*!***************************************************!*\
   !*** ./resources/js/services/category_service.js ***!
   \***************************************************/
-/*! exports provided: createCategory, loadCategories */
+/*! exports provided: createCategory, loadCategories, deleteCategory */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createCategory", function() { return createCategory; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadCategories", function() { return loadCategories; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deleteCategory", function() { return deleteCategory; });
 /* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./http_service */ "./resources/js/services/http_service.js");
 
 function createCategory(data) {
@@ -578,6 +638,9 @@ function createCategory(data) {
 }
 function loadCategories() {
   return Object(_http_service__WEBPACK_IMPORTED_MODULE_0__["http"])().get('/category');
+}
+function deleteCategory(id) {
+  return Object(_http_service__WEBPACK_IMPORTED_MODULE_0__["http"])()["delete"]("/category/".concat(id));
 }
 
 /***/ }),

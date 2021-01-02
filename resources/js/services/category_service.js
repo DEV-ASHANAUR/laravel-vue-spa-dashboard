@@ -6,3 +6,6 @@ export function createCategory(data){
 export function loadCategories(){
     return http().get('/category');
 }
+export function deleteCategory(id){
+    return http().delete(`/category/${id}`);
+}
