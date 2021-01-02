@@ -18,26 +18,33 @@
               </button>
           </span>
         </div>
-        <div class="card-body">
+        <div v-if="!tbloader" class="card-body">
             <div class="table-responsive">
                 <table class="table text-center">
                     <thead>
-                        <th>Sl</th>
-                        <th>Name</th>
-                        <th>Image</th>
-                        <th>Action</th>
+                        <tr>
+                          <th>Sl</th>
+                          <th>Name</th>
+                          <th>Image</th>
+                          <th>Action</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <td>01</td>
-                        <td>Mango</td>
-                        <td>Image</td>
-                        <td>
-                            <button class="btn btn-primary"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                        </td>
+                        <tr  v-for="(category,index) in categories" :key="index">
+                          <td>{{ index+1 }}</td>
+                          <td>{{category.name}}</td>
+                          <td><img :src="`${$store.state.serverPath}storage/${category.image}`" width="100px" class="img-fluid img-thumbnail" /></td>
+                          <td>
+                              <button class="btn btn-primary"><i class="fas fa-edit"></i></button>
+                              <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                          </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div v-if="tbloader" class="d-flex justify-content-center align-content-center mt-5">
+            <span>loading..</span>
         </div>
       </div>
 
@@ -62,7 +69,9 @@
             <hr>
             <div class="text-right">
               <button type="button" class="btn btn-default" @click="hideNewCategoryModal">Cancle</button>
-              <button type="submit" class="btn btn-primary"><i class="fas fa-check mr-1"></i>Save</button>
+              <button v-if="!loader" type="submit" class="btn btn-primary"><i class="fas fa-check mr-1"></i>Save</button>
+
+              <button v-if="loader" type="submit" class="btn btn-primary" disabled><i class="fas fa-check mr-1"></i>Saving</button>
             </div>
           </form>
         </div>
@@ -78,14 +87,36 @@ export default {
   name: 'category',
   data() {
     return {
+      categories: [],
       categoryData: {
         name: '',
         image: ''
       },
       errors: {},
+      loader: false,
+      tbloader:false,
     };
   },
+  mounted(){
+    this.loadCategories();
+  },
   methods: {
+    loadCategories: async function(){
+      this.tbloader = true;
+      try {
+        const response = await categoryService.
+        loadCategories();
+        console.log(response);
+        this.categories = response.data.data;
+        this.tbloader = false;
+        console.log(this.categories);
+      } catch (error) {
+        console.log(error);
+        this.flashMessage.error({
+            message: 'Oh, Some Error occured , please Refresh !'
+        });
+      }
+    },
     attachImage() {
         this.categoryData.image = this.$refs.newCategoryImage.files[0];
         let reader  = new FileReader();
@@ -103,12 +134,15 @@ export default {
       this.$refs['category-modal'].show()
     },
     createCategory: async function(){
+      this.loader = true;
       let formData = new FormData();
       formData.append('name', this.categoryData.name);
       formData.append('image', this.categoryData.image);
 
       try {
         const response = await categoryService.createCategory(formData);
+        this.categories.unshift(response.data);
+        this.loader = false;
         this.categoryData.name = '',
         this.categoryData.image = '',
         this.hideNewCategoryModal();
@@ -120,6 +154,7 @@ export default {
         switch (error.response.status) {
           case 422:
               this.errors = error.response.data.errors;
+              this.loader = false;
             break;
           default:
              this.flashMessage.error({

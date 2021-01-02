@@ -92,19 +92,77 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'category',
   data: function data() {
     return {
+      categories: [],
       categoryData: {
         name: '',
         image: ''
       },
-      errors: {}
+      errors: {},
+      loader: false,
+      tbloader: false
     };
   },
+  mounted: function mounted() {
+    this.loadCategories();
+  },
   methods: {
+    loadCategories: function () {
+      var _loadCategories = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.tbloader = true;
+                _context.prev = 1;
+                _context.next = 4;
+                return _services_category_service__WEBPACK_IMPORTED_MODULE_1__["loadCategories"]();
+
+              case 4:
+                response = _context.sent;
+                console.log(response);
+                this.categories = response.data.data;
+                this.tbloader = false;
+                console.log(this.categories);
+                _context.next = 15;
+                break;
+
+              case 11:
+                _context.prev = 11;
+                _context.t0 = _context["catch"](1);
+                console.log(_context.t0);
+                this.flashMessage.error({
+                  message: 'Oh, Some Error occured , please Refresh !'
+                });
+
+              case 15:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[1, 11]]);
+      }));
+
+      function loadCategories() {
+        return _loadCategories.apply(this, arguments);
+      }
+
+      return loadCategories;
+    }(),
     attachImage: function attachImage() {
       this.categoryData.image = this.$refs.newCategoryImage.files[0];
       var reader = new FileReader();
@@ -122,51 +180,55 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.$refs['category-modal'].show();
     },
     createCategory: function () {
-      var _createCategory = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      var _createCategory = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         var formData, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
+                this.loader = true;
                 formData = new FormData();
                 formData.append('name', this.categoryData.name);
                 formData.append('image', this.categoryData.image);
-                _context.prev = 3;
-                _context.next = 6;
+                _context2.prev = 4;
+                _context2.next = 7;
                 return _services_category_service__WEBPACK_IMPORTED_MODULE_1__["createCategory"](formData);
 
-              case 6:
-                response = _context.sent;
+              case 7:
+                response = _context2.sent;
+                this.categories.unshift(response.data);
+                this.loader = false;
                 this.categoryData.name = '', this.categoryData.image = '', this.hideNewCategoryModal();
                 this.flashMessage.success({
                   message: 'Category create successfully!'
                 });
-                _context.next = 20;
+                _context2.next = 24;
                 break;
 
-              case 11:
-                _context.prev = 11;
-                _context.t0 = _context["catch"](3);
-                _context.t1 = _context.t0.response.status;
-                _context.next = _context.t1 === 422 ? 16 : 18;
+              case 14:
+                _context2.prev = 14;
+                _context2.t0 = _context2["catch"](4);
+                _context2.t1 = _context2.t0.response.status;
+                _context2.next = _context2.t1 === 422 ? 19 : 22;
                 break;
 
-              case 16:
-                this.errors = _context.t0.response.data.errors;
-                return _context.abrupt("break", 20);
+              case 19:
+                this.errors = _context2.t0.response.data.errors;
+                this.loader = false;
+                return _context2.abrupt("break", 24);
 
-              case 18:
+              case 22:
                 this.flashMessage.error({
                   message: 'Oh, Some Error occured , please try again !'
                 });
-                return _context.abrupt("break", 20);
+                return _context2.abrupt("break", 24);
 
-              case 20:
+              case 24:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this, [[3, 11]]);
+        }, _callee2, this, [[4, 14]]);
       }));
 
       function createCategory() {
@@ -227,7 +289,53 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _vm._m(2)
+          !_vm.tbloader
+            ? _c("div", { staticClass: "card-body" }, [
+                _c("div", { staticClass: "table-responsive" }, [
+                  _c("table", { staticClass: "table text-center" }, [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.categories, function(category, index) {
+                        return _c("tr", { key: index }, [
+                          _c("td", [_vm._v(_vm._s(index + 1))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(category.name))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("img", {
+                              staticClass: "img-fluid img-thumbnail",
+                              attrs: {
+                                src:
+                                  _vm.$store.state.serverPath +
+                                  "storage/" +
+                                  category.image,
+                                width: "100px"
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _vm._m(3, true)
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.tbloader
+            ? _c(
+                "div",
+                {
+                  staticClass:
+                    "d-flex justify-content-center align-content-center mt-5"
+                },
+                [_c("span", [_vm._v("loading..")])]
+              )
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c(
@@ -333,17 +441,33 @@ var render = function() {
                       [_vm._v("Cancle")]
                     ),
                     _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary",
-                        attrs: { type: "submit" }
-                      },
-                      [
-                        _c("i", { staticClass: "fas fa-check mr-1" }),
-                        _vm._v("Save")
-                      ]
-                    )
+                    !_vm.loader
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: { type: "submit" }
+                          },
+                          [
+                            _c("i", { staticClass: "fas fa-check mr-1" }),
+                            _vm._v("Save")
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.loader
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: { type: "submit", disabled: "" }
+                          },
+                          [
+                            _c("i", { staticClass: "fas fa-check mr-1" }),
+                            _vm._v("Saving")
+                          ]
+                        )
+                      : _vm._e()
                   ])
                 ]
               )
@@ -377,37 +501,29 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-body" }, [
-      _c("div", { staticClass: "table-responsive" }, [
-        _c("table", { staticClass: "table text-center" }, [
-          _c("thead", [
-            _c("th", [_vm._v("Sl")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Name")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Image")]),
-            _vm._v(" "),
-            _c("th", [_vm._v("Action")])
-          ]),
-          _vm._v(" "),
-          _c("tbody", [
-            _c("td", [_vm._v("01")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Mango")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Image")]),
-            _vm._v(" "),
-            _c("td", [
-              _c("button", { staticClass: "btn btn-primary" }, [
-                _c("i", { staticClass: "fas fa-edit" })
-              ]),
-              _vm._v(" "),
-              _c("button", { staticClass: "btn btn-danger" }, [
-                _c("i", { staticClass: "fas fa-trash" })
-              ])
-            ])
-          ])
-        ])
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Sl")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Image")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Action")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("button", { staticClass: "btn btn-primary" }, [
+        _c("i", { staticClass: "fas fa-edit" })
+      ]),
+      _vm._v(" "),
+      _c("button", { staticClass: "btn btn-danger" }, [
+        _c("i", { staticClass: "fas fa-trash" })
       ])
     ])
   }
@@ -422,16 +538,20 @@ render._withStripped = true
 /*!***************************************************!*\
   !*** ./resources/js/services/category_service.js ***!
   \***************************************************/
-/*! exports provided: createCategory */
+/*! exports provided: createCategory, loadCategories */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createCategory", function() { return createCategory; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadCategories", function() { return loadCategories; });
 /* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./http_service */ "./resources/js/services/http_service.js");
 
 function createCategory(data) {
   return Object(_http_service__WEBPACK_IMPORTED_MODULE_0__["httpFile"])().post('/category', data);
+}
+function loadCategories() {
+  return Object(_http_service__WEBPACK_IMPORTED_MODULE_0__["http"])().get('/category');
 }
 
 /***/ }),
@@ -465,32 +585,6 @@ function httpFile() {
     }
   });
 }
-
-/***/ }),
-
-/***/ "./resources/js/store.js":
-/*!*******************************!*\
-  !*** ./resources/js/store.js ***!
-  \*******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
-/* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
-  state: {
-    apiURL: 'http://127.0.0.1:8000/api',
-    serverPath: 'http://127.0.0.1:8000/'
-  },
-  mutations: {},
-  action: {}
-}));
 
 /***/ }),
 
