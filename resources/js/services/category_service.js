@@ -9,3 +9,6 @@ export function loadCategories(){
 export function deleteCategory(id){
     return http().delete(`/category/${id}`);
 }
+export function editCategory(id,data){
+    return httpFile().post(`/category/${id}`,data);
+}

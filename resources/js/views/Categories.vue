@@ -1,9 +1,9 @@
 <template>
   <main>
     <div class="container-fluid">
-      <h1 class="mt-4">Dashboard</h1>
+      <h3 class="mt-4">Category</h3>
       <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Dashboard</li>
+        <li class="breadcrumb-item active"> <router-link to="/" exact="">Home</router-link> /Category</li>
       </ol>
       <div class="card mb-4">
         <div class="card-header d-flex justify-content-between">
@@ -32,10 +32,10 @@
                     <tbody>
                         <tr  v-for="(category,index) in categories" :key="index">
                           <td>{{ index+1 }}</td>
-                          <td>{{category.name}}</td>
+                          <td class="text-capitalize">{{category.name}}</td>
                           <td><img :src="`${$store.state.serverPath}storage/${category.image}`" width="100px" class="img-fluid img-thumbnail" /></td>
                           <td>
-                              <button class="btn btn-primary"><i class="fas fa-edit"></i></button>
+                              <button class="btn btn-primary" @click="editCategory(category)"><i class="fas fa-edit"></i></button>
                               <button class="btn btn-danger" @click="deleteCategory(category)"><i class="fas fa-trash"></i></button>
                           </td>
                         </tr>
@@ -73,7 +73,35 @@
             <div class="text-right">
               <button type="button" class="btn btn-default" @click="hideNewCategoryModal">Cancle</button>
               <button v-if="!loader" type="submit" class="btn btn-primary"><i class="fas fa-check mr-1"></i>Save</button>
-              <button v-if="loader" type="submit" class="btn btn-primary" disabled><i class="fas fa-check mr-1"></i>Saving</button>
+              <button v-if="loader" type="submit" class="btn btn-primary" disabled><i class="fas fa-check mr-1"></i>Saving..</button>
+            </div>
+          </form>
+        </div>
+      </b-modal>
+
+      <b-modal ref="editcategory-modal" hide-footer title="Edit Category">
+        <div class="d-block">
+          <form @submit.prevent="updateCategory">
+            <div class="from-group mb-3">
+              <label for="name">Enter Name</label>
+              <input type="text" class="form-control" v-model="editCategoryData.name" id="name" placeholder="Enter category name">
+              <div class="invalid-feedback" v-if="errors.name">{{errors.name[0]}}</div>
+            </div>
+
+            <div class="from-group mb-3">
+              <label for="image">Choose an Image</label>
+              <div class="p-2">
+                <img :src="`${$store.state.serverPath}storage/${editCategoryData.image}`" ref="editCategoryImageDisplay" class="cat_image" />
+              </div>
+              <input type="file" class="form-control-file d-block overflow-hidden" @change="editattachImage" ref="editCategoryImage" id="image">
+              <div class="invalid-feedback" v-if="errors.image">{{errors.image[0]}}</div>
+            </div>
+
+            <hr>
+            <div class="text-right">
+              <button type="button" class="btn btn-default" @click="hideEditCategoryModal">Cancle</button>
+              <button v-if="!editloader" type="submit" class="btn btn-primary"><i class="fas fa-check mr-1"></i>Update</button>
+              <button v-if="editloader" type="submit" class="btn btn-primary" disabled><i class="fas fa-check mr-1"></i>Updating..</button>
             </div>
           </form>
         </div>
@@ -94,9 +122,11 @@ export default {
         name: '',
         image: ''
       },
+      editCategoryData: {},
       errors: {},
       loader: false,
       tbloader:false,
+      editloader:false,
     };
   },
   mounted(){
@@ -111,9 +141,9 @@ export default {
         console.log(response);
         this.categories = response.data.data;
         this.tbloader = false;
-        console.log(this.categories);
+        // console.log(this.categories);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         this.flashMessage.error({
             message: 'Oh, Some Error occured , please Refresh !'
         });
@@ -185,6 +215,62 @@ export default {
           });
         }
     },
+    hideEditCategoryModal(){
+      this.$refs['editcategory-modal'].hide();
+    },
+    showEditCategoryModal(){
+      this.$refs['editcategory-modal'].show();
+    },
+    editCategory(category){
+      this.editCategoryData = {...category};
+      this.showEditCategoryModal();
+    },
+    editattachImage() {
+        this.editCategoryData.image = this.$refs.editCategoryImage.files[0];
+        let reader  = new FileReader();
+        reader.addEventListener('load',function(){
+            this.$refs.editCategoryImageDisplay.src = reader.result;
+        }.bind(this), false);
+        reader.readAsDataURL(this.editCategoryData.image);
+    },
+    updateCategory: async function(){
+      this.editloader = true;
+      let formData = new FormData();
+      formData.append('name', this.editCategoryData.name);
+      formData.append('image', this.editCategoryData.image);
+      formData.append('_method','put');
+
+      try {
+        const response = await categoryService.editCategory(this.editCategoryData.id,formData);
+        this.editloader = false;
+        this.categories.map(category => {
+            if(category.id == response.data.id){
+              for(let key in response.data)
+              {
+                category[key] = response.data[key];
+              }
+            }
+        });
+        this.hideEditCategoryModal();
+        this.flashMessage.success({
+            message: 'Category Update successfully!'
+        });
+      } catch (error) {
+        console.log(error);
+        switch (error.response.status) {
+          case 422:
+              this.errors = error.response.data.errors;
+              this.editloader = false;
+            break;
+          default:
+             this.flashMessage.error({
+                message: 'Oh, Some Error occured , please try again !'
+            });
+            break;
+        }
+      }
+
+    }
   }
 };
 </script>
