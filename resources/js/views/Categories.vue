@@ -41,6 +41,12 @@
                         </tr>
                     </tbody>
                 </table>
+                <div v-if="moreExists" class="d-flex justify-content-center align-content-center mt-5 mb-5">
+                    <button class="btn btn-primary btn-sm" type="button" @click="loadMore">
+                      <span v-if="nextloader" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Load More
+                    </button>
+                </div>
             </div>
         </div>
         <div v-if="tbloader" class="d-flex justify-content-center align-content-center mt-5 mb-5">
@@ -127,6 +133,9 @@ export default {
       loader: false,
       tbloader:false,
       editloader:false,
+      moreExists: false,
+      nextPage: 0,
+      nextloader:false,
     };
   },
   mounted(){
@@ -141,6 +150,12 @@ export default {
         console.log(response);
         this.categories = response.data.data;
         this.tbloader = false;
+        if(response.data.current_page < response.data.last_page){
+          this.moreExists = true;
+          this.nextPage = response.data.current_page + 1;
+        }else{
+           this.moreExists = false;
+        }
         // console.log(this.categories);
       } catch (error) {
         // console.log(error);
@@ -175,9 +190,9 @@ export default {
         const response = await categoryService.createCategory(formData);
         this.categories.unshift(response.data);
         this.loader = false;
+        this.hideNewCategoryModal();
         this.categoryData.name = '',
         this.categoryData.image = '',
-        this.hideNewCategoryModal();
         this.flashMessage.success({
             message: 'Category create successfully!'
         });
@@ -269,8 +284,25 @@ export default {
             break;
         }
       }
-
-    }
+    },
+    loadMore: async function(){
+      try {
+        this.nextloader = true;
+        const response = await categoryService.loadMore(this.nextPage);
+        this.nextloader = false;
+        if(response.data.current_page < response.data.last_page){
+          this.moreExists = true;
+          this.nextPage = response.data.current_page + 1;
+        }else{
+           this.moreExists = false;
+        }
+        response.data.data.forEach(data => {
+          this.categories.push(data);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
   }
 };
 </script>

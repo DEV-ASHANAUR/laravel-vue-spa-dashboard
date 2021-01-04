@@ -137,6 +137,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'category',
@@ -151,7 +157,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       errors: {},
       loader: false,
       tbloader: false,
-      editloader: false
+      editloader: false,
+      moreExists: false,
+      nextPage: 0,
+      nextloader: false
     };
   },
   mounted: function mounted() {
@@ -174,25 +183,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context.sent;
                 console.log(response);
                 this.categories = response.data.data;
-                this.tbloader = false; // console.log(this.categories);
+                this.tbloader = false;
 
-                _context.next = 13;
+                if (response.data.current_page < response.data.last_page) {
+                  this.moreExists = true;
+                  this.nextPage = response.data.current_page + 1;
+                } else {
+                  this.moreExists = false;
+                } // console.log(this.categories);
+
+
+                _context.next = 14;
                 break;
 
-              case 10:
-                _context.prev = 10;
+              case 11:
+                _context.prev = 11;
                 _context.t0 = _context["catch"](1);
                 // console.log(error);
                 this.flashMessage.error({
                   message: 'Oh, Some Error occured , please Refresh !'
                 });
 
-              case 13:
+              case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[1, 10]]);
+        }, _callee, this, [[1, 11]]);
       }));
 
       function loadCategories() {
@@ -236,8 +253,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response = _context2.sent;
                 this.categories.unshift(response.data);
                 this.loader = false;
-                this.categoryData.name = '', this.categoryData.image = '', this.hideNewCategoryModal();
-                this.flashMessage.success({
+                this.hideNewCategoryModal();
+                this.categoryData.name = '', this.categoryData.image = '', this.flashMessage.success({
                   message: 'Category create successfully!'
                 });
                 _context2.next = 24;
@@ -409,6 +426,56 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return updateCategory;
+    }(),
+    loadMore: function () {
+      var _loadMore = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var _this = this;
+
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.prev = 0;
+                this.nextloader = true;
+                _context5.next = 4;
+                return _services_category_service__WEBPACK_IMPORTED_MODULE_1__["loadMore"](this.nextPage);
+
+              case 4:
+                response = _context5.sent;
+                this.nextloader = false;
+
+                if (response.data.current_page < response.data.last_page) {
+                  this.moreExists = true;
+                  this.nextPage = response.data.current_page + 1;
+                } else {
+                  this.moreExists = false;
+                }
+
+                response.data.data.forEach(function (data) {
+                  _this.categories.push(data);
+                });
+                _context5.next = 13;
+                break;
+
+              case 10:
+                _context5.prev = 10;
+                _context5.t0 = _context5["catch"](0);
+                console.log(_context5.t0);
+
+              case 13:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this, [[0, 10]]);
+      }));
+
+      function loadMore() {
+        return _loadMore.apply(this, arguments);
+      }
+
+      return loadMore;
     }()
   }
 });
@@ -538,7 +605,42 @@ var render = function() {
                         0
                       )
                     ]
-                  )
+                  ),
+                  _vm._v(" "),
+                  _vm.moreExists
+                    ? _c(
+                        "div",
+                        {
+                          staticClass:
+                            "d-flex justify-content-center align-content-center mt-5 mb-5"
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary btn-sm",
+                              attrs: { type: "button" },
+                              on: { click: _vm.loadMore }
+                            },
+                            [
+                              _vm.nextloader
+                                ? _c("span", {
+                                    staticClass:
+                                      "spinner-border spinner-border-sm",
+                                    attrs: {
+                                      role: "status",
+                                      "aria-hidden": "true"
+                                    }
+                                  })
+                                : _vm._e(),
+                              _vm._v(
+                                "\n                    Load More\n                  "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    : _vm._e()
                 ])
               ])
             : _vm._e(),
@@ -892,7 +994,7 @@ render._withStripped = true
 /*!***************************************************!*\
   !*** ./resources/js/services/category_service.js ***!
   \***************************************************/
-/*! exports provided: createCategory, loadCategories, deleteCategory, editCategory */
+/*! exports provided: createCategory, loadCategories, deleteCategory, editCategory, loadMore */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -901,6 +1003,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadCategories", function() { return loadCategories; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deleteCategory", function() { return deleteCategory; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "editCategory", function() { return editCategory; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadMore", function() { return loadMore; });
 /* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./http_service */ "./resources/js/services/http_service.js");
 
 function createCategory(data) {
@@ -914,6 +1017,9 @@ function deleteCategory(id) {
 }
 function editCategory(id, data) {
   return Object(_http_service__WEBPACK_IMPORTED_MODULE_0__["httpFile"])().post("/category/".concat(id), data);
+}
+function loadMore(nextpage) {
+  return Object(_http_service__WEBPACK_IMPORTED_MODULE_0__["http"])().get("/category?page=".concat(nextpage));
 }
 
 /***/ }),
