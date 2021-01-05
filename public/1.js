@@ -143,15 +143,117 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'category',
+  name: "category",
   data: function data() {
     return {
       categories: [],
       categoryData: {
-        name: '',
-        image: ''
+        name: "",
+        image: ""
       },
       editCategoryData: {},
       errors: {},
@@ -201,7 +303,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.t0 = _context["catch"](1);
                 // console.log(error);
                 this.flashMessage.error({
-                  message: 'Oh, Some Error occured , please Refresh !'
+                  message: "Oh, Some Error occured , please Refresh !"
                 });
 
               case 14:
@@ -221,18 +323,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     attachImage: function attachImage() {
       this.categoryData.image = this.$refs.newCategoryImage.files[0];
       var reader = new FileReader();
-      reader.addEventListener('load', function () {
+      reader.addEventListener("load", function () {
         this.$refs.newCategoryImageDisplay.src = reader.result;
       }.bind(this), false);
       reader.readAsDataURL(this.categoryData.image);
     },
     hideNewCategoryModal: function hideNewCategoryModal() {
-      this.$refs['category-modal'].hide();
-      this.categoryData.name = '';
-      this.categoryData.image = '';
+      this.$refs["category-modal"].hide();
+      this.categoryData.name = "";
+      this.categoryData.image = "";
     },
     showNewCategoryModal: function showNewCategoryModal() {
-      this.$refs['category-modal'].show();
+      this.$refs["category-modal"].show();
     },
     createCategory: function () {
       var _createCategory = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
@@ -243,8 +345,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 this.loader = true;
                 formData = new FormData();
-                formData.append('name', this.categoryData.name);
-                formData.append('image', this.categoryData.image);
+                formData.append("name", this.categoryData.name);
+                formData.append("image", this.categoryData.image);
                 _context2.prev = 4;
                 _context2.next = 7;
                 return _services_category_service__WEBPACK_IMPORTED_MODULE_1__["createCategory"](formData);
@@ -254,8 +356,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.categories.unshift(response.data);
                 this.loader = false;
                 this.hideNewCategoryModal();
-                this.categoryData.name = '', this.categoryData.image = '', this.flashMessage.success({
-                  message: 'Category create successfully!'
+                this.categoryData.name = "", this.categoryData.image = "", this.flashMessage.success({
+                  message: "Category create successfully!"
                 });
                 _context2.next = 24;
                 break;
@@ -274,7 +376,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 22:
                 this.flashMessage.error({
-                  message: 'Oh, Some Error occured , please try again !'
+                  message: "Oh, Some Error occured , please try again !"
                 });
                 return _context2.abrupt("break", 24);
 
@@ -317,7 +419,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   return obj.id != category.id;
                 });
                 this.flashMessage.success({
-                  message: 'Category deleted successfully!'
+                  message: "Category deleted successfully!"
                 });
                 _context3.next = 13;
                 break;
@@ -344,10 +446,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return deleteCategory;
     }(),
     hideEditCategoryModal: function hideEditCategoryModal() {
-      this.$refs['editcategory-modal'].hide();
+      this.$refs["editcategory-modal"].hide();
     },
     showEditCategoryModal: function showEditCategoryModal() {
-      this.$refs['editcategory-modal'].show();
+      this.$refs["editcategory-modal"].show();
     },
     editCategory: function editCategory(category) {
       this.editCategoryData = _objectSpread({}, category);
@@ -356,7 +458,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     editattachImage: function editattachImage() {
       this.editCategoryData.image = this.$refs.editCategoryImage.files[0];
       var reader = new FileReader();
-      reader.addEventListener('load', function () {
+      reader.addEventListener("load", function () {
         this.$refs.editCategoryImageDisplay.src = reader.result;
       }.bind(this), false);
       reader.readAsDataURL(this.editCategoryData.image);
@@ -370,9 +472,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 this.editloader = true;
                 formData = new FormData();
-                formData.append('name', this.editCategoryData.name);
-                formData.append('image', this.editCategoryData.image);
-                formData.append('_method', 'put');
+                formData.append("name", this.editCategoryData.name);
+                formData.append("image", this.editCategoryData.image);
+                formData.append("_method", "put");
                 _context4.prev = 5;
                 _context4.next = 8;
                 return _services_category_service__WEBPACK_IMPORTED_MODULE_1__["editCategory"](this.editCategoryData.id, formData);
@@ -389,7 +491,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
                 this.hideEditCategoryModal();
                 this.flashMessage.success({
-                  message: 'Category Update successfully!'
+                  message: "Category Update successfully!"
                 });
                 _context4.next = 26;
                 break;
@@ -409,7 +511,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 24:
                 this.flashMessage.error({
-                  message: 'Oh, Some Error occured , please try again !'
+                  message: "Oh, Some Error occured , please try again !"
                 });
                 return _context4.abrupt("break", 26);
 
@@ -512,7 +614,7 @@ var render = function() {
               _c("router-link", { attrs: { to: "/", exact: "" } }, [
                 _vm._v("Home")
               ]),
-              _vm._v(" /Category")
+              _vm._v(" /Category\n      ")
             ],
             1
           )
@@ -534,7 +636,7 @@ var render = function() {
                   },
                   [
                     _c("i", { staticClass: "fas fa-plus mr-1" }),
-                    _vm._v("\n                Create New\n            ")
+                    _vm._v("\n            Create New\n          ")
                   ]
                 )
               ])
@@ -633,9 +735,7 @@ var render = function() {
                                     }
                                   })
                                 : _vm._e(),
-                              _vm._v(
-                                "\n                    Load More\n                  "
-                              )
+                              _vm._v("\n              Load More\n            ")
                             ]
                           )
                         ]
@@ -713,7 +813,11 @@ var render = function() {
                     _vm._v(" "),
                     _vm.errors.name
                       ? _c("div", { staticClass: "invalid-feedback" }, [
-                          _vm._v(_vm._s(_vm.errors.name[0]))
+                          _vm._v(
+                            "\n              " +
+                              _vm._s(_vm.errors.name[0]) +
+                              "\n            "
+                          )
                         ])
                       : _vm._e()
                   ]),
@@ -742,7 +846,11 @@ var render = function() {
                     _vm._v(" "),
                     _vm.errors.image
                       ? _c("div", { staticClass: "invalid-feedback" }, [
-                          _vm._v(_vm._s(_vm.errors.image[0]))
+                          _vm._v(
+                            "\n              " +
+                              _vm._s(_vm.errors.image[0]) +
+                              "\n            "
+                          )
                         ])
                       : _vm._e()
                   ]),
@@ -757,7 +865,7 @@ var render = function() {
                         attrs: { type: "button" },
                         on: { click: _vm.hideNewCategoryModal }
                       },
-                      [_vm._v("Cancle")]
+                      [_vm._v("\n              Cancle\n            ")]
                     ),
                     _vm._v(" "),
                     !_vm.loader
@@ -769,7 +877,7 @@ var render = function() {
                           },
                           [
                             _c("i", { staticClass: "fas fa-check mr-1" }),
-                            _vm._v("Save")
+                            _vm._v("Save\n            ")
                           ]
                         )
                       : _vm._e(),
@@ -783,7 +891,7 @@ var render = function() {
                           },
                           [
                             _c("i", { staticClass: "fas fa-check mr-1" }),
-                            _vm._v("Saving..")
+                            _vm._v("Saving..\n            ")
                           ]
                         )
                       : _vm._e()
@@ -850,7 +958,11 @@ var render = function() {
                     _vm._v(" "),
                     _vm.errors.name
                       ? _c("div", { staticClass: "invalid-feedback" }, [
-                          _vm._v(_vm._s(_vm.errors.name[0]))
+                          _vm._v(
+                            "\n              " +
+                              _vm._s(_vm.errors.name[0]) +
+                              "\n            "
+                          )
                         ])
                       : _vm._e()
                   ]),
@@ -882,7 +994,11 @@ var render = function() {
                     _vm._v(" "),
                     _vm.errors.image
                       ? _c("div", { staticClass: "invalid-feedback" }, [
-                          _vm._v(_vm._s(_vm.errors.image[0]))
+                          _vm._v(
+                            "\n              " +
+                              _vm._s(_vm.errors.image[0]) +
+                              "\n            "
+                          )
                         ])
                       : _vm._e()
                   ]),
@@ -897,7 +1013,7 @@ var render = function() {
                         attrs: { type: "button" },
                         on: { click: _vm.hideEditCategoryModal }
                       },
-                      [_vm._v("Cancle")]
+                      [_vm._v("\n              Cancle\n            ")]
                     ),
                     _vm._v(" "),
                     !_vm.editloader
@@ -909,7 +1025,7 @@ var render = function() {
                           },
                           [
                             _c("i", { staticClass: "fas fa-check mr-1" }),
-                            _vm._v("Update")
+                            _vm._v("Update\n            ")
                           ]
                         )
                       : _vm._e(),
@@ -923,7 +1039,7 @@ var render = function() {
                           },
                           [
                             _c("i", { staticClass: "fas fa-check mr-1" }),
-                            _vm._v("Updating..")
+                            _vm._v("Updating..\n            ")
                           ]
                         )
                       : _vm._e()
@@ -945,7 +1061,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", [
       _c("i", { staticClass: "fas fa-list mr-1" }),
-      _vm._v("\n              Category List\n        ")
+      _vm._v("\n          Category List\n        ")
     ])
   },
   function() {
@@ -979,7 +1095,7 @@ var staticRenderFns = [
           staticClass: "spinner-border spinner-border-sm",
           attrs: { role: "status", "aria-hidden": "true" }
         }),
-        _vm._v("\n            Loading...\n          ")
+        _vm._v("\n          Loading...\n        ")
       ]
     )
   }
