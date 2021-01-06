@@ -381,7 +381,7 @@ export default {
           message: "Category Update successfully!",
         });
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         switch (error.response.status) {
           case 422:
             this.errors = error.response.data.errors;

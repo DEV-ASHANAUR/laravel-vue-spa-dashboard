@@ -10,24 +10,12 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $formData = $request->all();
-        $validator = \Validator::make($formData,[
+        // $formData = $request->all();
+        $request->validate([
             'name' => 'required|min:3|max:30',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|min:8',
-        ],[
-            'name.required' => 'Please give Your Name',
-            'email.required' => 'Please give Email Address',
-            'email.unique' => 'Please give unique Email Address or Login',
-            'password.required' => 'Please give Password',
         ]);
-        if($validator->fails()){
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->getMessageBag(),
-            ]);
-        }
-
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email; 

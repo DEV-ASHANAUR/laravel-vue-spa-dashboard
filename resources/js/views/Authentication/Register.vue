@@ -11,46 +11,41 @@
                 </h3>
               </div>
               <div class="card-body">
-                <form>
+                <form @submit.prevent="register">
                   <div class="form-row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="small mb-1" for="inputFirstName"
-                          >First Name</label
-                        >
+                        <label class="small mb-1" for="Name">Enter Name</label>
                         <input
                           class="form-control py-4"
-                          id="inputFirstName"
+                          id="Name"
+                          v-model="user.name"
                           type="text"
-                          placeholder="Enter first name"
+                          placeholder="Enter name"
                         />
+                        <div class="invalid-feedback" v-if="errors.name">
+                          {{ errors.name[0] }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="small mb-1" for="inputLastName"
-                          >Last Name</label
+                        <label class="small mb-1" for="inputEmailAddress"
+                          >Email</label
                         >
                         <input
                           class="form-control py-4"
-                          id="inputLastName"
-                          type="text"
-                          placeholder="Enter last name"
+                          id="inputEmailAddress"
+                          v-model="user.email"
+                          type="email"
+                          aria-describedby="emailHelp"
+                          placeholder="Enter email address"
                         />
+                        <div class="invalid-feedback" v-if="errors.email">
+                          {{ errors.email[0] }}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="small mb-1" for="inputEmailAddress"
-                      >Email</label
-                    >
-                    <input
-                      class="form-control py-4"
-                      id="inputEmailAddress"
-                      type="email"
-                      aria-describedby="emailHelp"
-                      placeholder="Enter email address"
-                    />
                   </div>
                   <div class="form-row">
                     <div class="col-md-6">
@@ -61,9 +56,13 @@
                         <input
                           class="form-control py-4"
                           id="inputPassword"
+                          v-model="user.password"
                           type="password"
                           placeholder="Enter password"
                         />
+                        <div class="invalid-feedback" v-if="errors.password">
+                          {{ errors.password[0] }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -74,22 +73,30 @@
                         <input
                           class="form-control py-4"
                           id="inputConfirmPassword"
+                          v-model="user.password_confirmation"
                           type="password"
                           placeholder="Confirm password"
                         />
+                        <div class="invalid-feedback" v-if="errors.password_confirmation">
+                          {{ errors.password_confirmation[0] }}
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div class="form-group mt-4 mb-0">
-                    <a class="btn btn-primary btn-block" href="login.html"
+                    <!-- <a class="btn btn-primary btn-block" href="login.html"
                       >Create Account</a
-                    >
+                    > -->
+                    <button type="submit" class="btn btn-primary btn-block"> Register Account </button>
                   </div>
                 </form>
               </div>
               <div class="card-footer text-center">
                 <div class="small">
-                  <a href="login.html">Have an account? Go to login</a>
+                  <!-- <a href="login.html">Have an account? Go to login</a> -->
+                  <router-link to="/login"
+                    >Have an account? Go to login</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -101,14 +108,48 @@
 </template>
 
 <script>
+import * as auth from '../../services/auth_service';
 export default {
-
+  name: "Register",
+  data(){
+    return{
+      user: {
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: ''
+      },
+      errors: {},
+    }
+  },
+  methods: {
+    register: async function () {
+      try {
+        const response = await auth.register(this.user);
+        if(response.data.status_code == 201){
+            this.errors = {};
+            this.$router.push('/login');
+        }
+      } catch (error) {
+        switch (error.response.status) {
+          case 422:
+            this.errors = error.response.data.errors;
+            break;
+          default:
+            this.flashMessage.error({
+              message: "Oh, Some Error occured , please try again !",
+            });
+            break;
+        }
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
-    #layoutAuthentication_content{
-        background-color: #007bff;
-        height: 100vh;
-    }
+#layoutAuthentication_content {
+  background-color: #007bff;
+  height: 100vh;
+}
 </style>
