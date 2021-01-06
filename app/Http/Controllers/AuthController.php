@@ -51,7 +51,7 @@ class AuthController extends Controller
         $validator = \Validator::make($formData,[
             'email' => 'required|email',
             'password' => 'required',
-            'remember_me' => 'boolean'
+            // 'remember_me' => 'boolean'
         ],[
             'email.required' => 'Please give Email Address',
             'password.required' => 'Please give Password',
