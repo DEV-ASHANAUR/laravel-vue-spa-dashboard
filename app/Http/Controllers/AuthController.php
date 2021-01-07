@@ -35,25 +35,14 @@ class AuthController extends Controller
     }
     public function login(Request $request)
     {
-        $formData = $request->all();
-        $validator = \Validator::make($formData,[
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            // 'remember_me' => 'boolean'
-        ],[
-            'email.required' => 'Please give Email Address',
-            'password.required' => 'Please give Password',
+            'remember_me' => 'boolean'
         ]);
-        if($validator->fails()){
-            return response()->json([
-                'success' => false,
-                'message' => 'Error !',
-                'errors' => $validator->getMessageBag(),
-            ]);
-        }
         if(!Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             return response()->json([
-                'message' => 'Unauthorized',
+                'message' => 'Invaild email and password',
                 'status_code' => 401
             ], 401);
         }
